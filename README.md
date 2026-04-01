@@ -11,10 +11,11 @@ Feels like magic... And fun, and silly! Maybe useful, you never know.
 
 ## Requirements
 
-On *works for me* after fiddling with it for a coupe of hours basis. 🤷🏻‍♂️
+(on a *works-for-me after fiddling-with-it-for-a-couple-of-hours* basis)
 
-* A computer running macOS (the UI overlay needs tweaks for other plaforms).
+* A computer running macOS (the UI overlay needs tweaks for other platforms).
 * Internet connectivity.
+* Python 3.14 (should work with earlier versions, I suppose).
 * An API key from [Deepgram](https://deepgram.com/) for speech to text. [see note 1]
 * An API key from [DeepL](https://www.deepl.com/) for translation. [see note 2]
 
@@ -22,7 +23,7 @@ Notes, as of this writing:
 
 1. There's a free USD 200.00 credit in a *pay as you go* model;
    enough for 400+ hours of speech to text with the most expensive model.
-2. The free version allows for 50k characeters/month.
+2. The free version allows for 50k characters/month.
 
 
 ## Running
@@ -96,18 +97,10 @@ My last message, to **Marco**, was:
   the remaining code was mostly adapted from Deepgram/DeepL examples and docs.
 
 * All of the code was written by myself, mostly as an experiment,
-  and of course as a fun thing to bring to our montly meetup, tomorrow,
-  April, 2nd, 2026.
+  and of course as a fun thing to bring to our monthly meetup, tomorrow,
+  April 2nd, 2026.
 
 
 ## License
 
-The MIT License (MIT)
-
-Copyright © 2026 Tiago Montes
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Copyright © 2026 Tiago Montes, MIT License - see the [LICENSE](LICENSE) file.
