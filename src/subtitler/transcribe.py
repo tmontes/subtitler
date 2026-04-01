@@ -40,8 +40,8 @@ def handle_message(message: ListenV1Response, text_queue: asyncio.Queue) -> None
         case ListenV1Results():
             # TODO: do we need to handle `message.is_final`?
             transcript = message.channel.alternatives[0].transcript
-            if transcript:
-                text_queue.put_nowait(transcript)
+            # send transcripts even if empty strings: cleans up the UI
+            text_queue.put_nowait(transcript)
         case _:
             log.error(f'unhandled: {message=}')
 

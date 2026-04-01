@@ -5,6 +5,8 @@ import os
 from . import audio
 from . import transcribe
 from . import translate
+from . import ui
+
 
 import certifi
 os.environ['SSL_CERT_FILE'] = certifi.where()
@@ -23,23 +25,26 @@ def setup_logging():
     logging.getLogger('deepl').setLevel(logging.WARNING)
 
 
-async def async_main() -> None:
+async def async_main(root_window) -> None:
 
     audio_queue = asyncio.Queue()
     text_queue = asyncio.Queue()
+    ui_queue = asyncio.Queue()
 
     await asyncio.gather(
         audio.stream_input(audio_queue),
         transcribe.run(audio_queue, text_queue),
-        translate.run(text_queue),
+        translate.run(text_queue, ui_queue),
+        ui.run(root_window, ui_queue),
     )
 
 
 def main():
     setup_logging()
+    root_window = ui.create()
     try:
         log.info('start')
-        asyncio.run(async_main())
+        asyncio.run(async_main(root_window))
     except KeyboardInterrupt:
         log.info('interrupted')
 

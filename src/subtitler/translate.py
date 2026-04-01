@@ -11,7 +11,7 @@ log = logging.getLogger(__name__.split('.')[-1])
 
 
 
-async def run(queue: asyncio.Queue):
+async def run(text_queue: asyncio.Queue, ui_queue: asyncio.Queue):
 
     client = deepl.DeepLClient(
         auth_key=os.environ['DEEPL_API_KEY'],
@@ -20,10 +20,17 @@ async def run(queue: asyncio.Queue):
 
     log.info('starting')
     while True:
-        transcription = await queue.get()
-        result = await asyncio.to_thread(
-            client.translate_text,
-            transcription,
-            target_lang=config.DL_LANG,
-        )
-        print(f'\n{result.text}')
+        transcription = await text_queue.get()
+        if transcription == '':
+            # pass it along: cleans up the UI
+            translated = ''
+        else:
+            # TODO: could we do better? more context, for example?
+            result = await asyncio.to_thread(
+                client.translate_text,
+                transcription,
+                target_lang=config.DL_LANG,
+            )
+            translated = result.text
+        log.debug(f'sending {translated=}')
+        await ui_queue.put(translated)
