@@ -1,0 +1,24 @@
+[project]
+name = "subtitler"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Tiago Montes", email = "self@tmont.es" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "deepgram-sdk>=6.1.1",
+    "deepl>=1.29.0",
+    "sounddevice>=0.5.5",
+]
+
+[project.scripts]
+subtitler = "subtitler.__main__:main"
+
+[build-system]
+requires = ["uv_build>=0.10.11,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = []
