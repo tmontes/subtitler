@@ -5,7 +5,8 @@
 DG_MODEL = 'nova-3'
 DG_ENCODING = 'linear16'
 DG_SAMPLE_RATE = 48_000
-DG_LANGUAGE = 'pt-PT' # 'en-US'
+DG_LANGUAGE = 'en-US' # 'pt-PT'
+
 
 # Sounddevice
 # -----------
