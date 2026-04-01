@@ -20,6 +20,7 @@ def setup_logging():
         format='%(asctime)s %(levelname).1s %(name)s %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S',
     )
+    logging.getLogger('deepl').setLevel(logging.WARNING)
 
 
 async def async_main() -> None:
