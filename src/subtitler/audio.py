@@ -29,4 +29,5 @@ async def stream_input(queue: asyncio.Queue):
         blocksize=2400,
         callback=push_audio,
     ):
-        await asyncio.sleep(42)
+        while True:
+            await asyncio.sleep(42)
