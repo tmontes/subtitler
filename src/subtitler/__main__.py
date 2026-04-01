@@ -3,6 +3,7 @@ import os
 
 from . import audio
 from . import transcribe
+from . import translate
 
 import certifi
 os.environ['SSL_CERT_FILE'] = certifi.where()
@@ -11,10 +12,12 @@ os.environ['SSL_CERT_FILE'] = certifi.where()
 async def async_main() -> None:
 
     audio_queue = asyncio.Queue()
+    text_queue = asyncio.Queue()
 
     await asyncio.gather(
         audio.stream_input(audio_queue),
-        transcribe.run(audio_queue),
+        transcribe.run(audio_queue, text_queue),
+        translate.run(text_queue),
     )
 
 

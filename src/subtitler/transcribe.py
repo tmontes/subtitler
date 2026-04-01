@@ -30,19 +30,19 @@ async def audio_sender(connection, queue):
     # await connection.send_close_stream()
 
 
-def handle_message(message: ListenV1Response) -> None:
+def handle_message(message: ListenV1Response, text_queue: asyncio.Queue) -> None:
 
     match message:
         case ListenV1Results():
-            is_final = message.is_final
+            # TODO: do we need to handle `message.is_final`?
             transcript = message.channel.alternatives[0].transcript
             if transcript:
-                print(f'{is_final=} {transcript=}')
+                text_queue.put_nowait(transcript)
         case _:
             print(f'unhandled: {message=}')
 
 
-async def run(queue: asyncio.Queue):
+async def run(audio_queue: asyncio.Queue, text_queue: asyncio.Queue):
 
     client = AsyncDeepgramClient()
     async with client.listen.v1.connect(
@@ -55,12 +55,12 @@ async def run(queue: asyncio.Queue):
 
 
         connection.on(EventType.OPEN, lambda _: print("Connection opened"))
-        connection.on(EventType.MESSAGE, handle_message)
+        connection.on(EventType.MESSAGE, lambda m: handle_message(m, text_queue))
         connection.on(EventType.CLOSE, lambda _: print("Connection closed"))
-        connection.on(EventType.ERROR, lambda error: print(f"Caught: {error}"))
+        connection.on(EventType.ERROR, lambda error: print(f"ERROR: {error}"))
 
         # Helper task
-        audio_sender_task = asyncio.create_task(audio_sender(connection, queue))
+        audio_sender_task = asyncio.create_task(audio_sender(connection, audio_queue))
         print('Audio now running...')
 
         # Start listening
