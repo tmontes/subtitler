@@ -26,7 +26,7 @@ async def stream_input(queue: asyncio.Queue):
     with sd.RawInputStream(
         samplerate=r.SD_SAMPLE_RATE,
         dtype=r.SD_DTYPE,
-        blocksize=2400,
+        blocksize=r.SD_BLOCK_SIZE,
         callback=push_audio,
     ):
         while True:
