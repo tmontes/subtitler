@@ -10,7 +10,7 @@ from deepgram.listen.v1.types import (
     ListenV1SpeechStarted,
 )
 
-from . import reference as r
+from . import config
 
 
 log = logging.getLogger(__name__.split('.')[-1])
@@ -50,10 +50,10 @@ async def run(audio_queue: asyncio.Queue, text_queue: asyncio.Queue):
 
     client = AsyncDeepgramClient()
     async with client.listen.v1.connect(
-        model=r.DG_MODEL,
-        encoding=r.DG_ENCODING,
-        sample_rate=r.DG_SAMPLE_RATE,
-        language=r.DG_LANGUAGE,
+        model=config.DG_MODEL,
+        encoding=config.DG_ENCODING,
+        sample_rate=config.DG_SAMPLE_RATE,
+        language=config.DG_LANGUAGE,
         punctuate='true',
     ) as connection:
 
