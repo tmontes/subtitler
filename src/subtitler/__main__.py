@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import os
 
 from . import audio
@@ -7,6 +8,18 @@ from . import translate
 
 import certifi
 os.environ['SSL_CERT_FILE'] = certifi.where()
+
+
+log = logging.getLogger(__package__)
+
+
+def setup_logging():
+
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s %(levelname).1s %(name)s %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+    )
 
 
 async def async_main() -> None:
@@ -22,10 +35,12 @@ async def async_main() -> None:
 
 
 def main():
+    setup_logging()
     try:
+        log.info('start')
         asyncio.run(async_main())
     except KeyboardInterrupt:
-        print('interrupted')
+        log.info('interrupted')
 
 
 

@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 from deepgram import AsyncDeepgramClient
 from deepgram.core.events import EventType
@@ -10,6 +11,9 @@ from deepgram.listen.v1.types import (
 )
 
 from . import reference as r
+
+
+log = logging.getLogger(__name__.split('.')[-1])
 
 
 ListenV1Response = (
@@ -39,7 +43,7 @@ def handle_message(message: ListenV1Response, text_queue: asyncio.Queue) -> None
             if transcript:
                 text_queue.put_nowait(transcript)
         case _:
-            print(f'unhandled: {message=}')
+            log.error(f'unhandled: {message=}')
 
 
 async def run(audio_queue: asyncio.Queue, text_queue: asyncio.Queue):
@@ -54,16 +58,14 @@ async def run(audio_queue: asyncio.Queue, text_queue: asyncio.Queue):
     ) as connection:
 
 
-        connection.on(EventType.OPEN, lambda _: print("Connection opened"))
+        connection.on(EventType.OPEN, lambda _: log.info('connected'))
         connection.on(EventType.MESSAGE, lambda m: handle_message(m, text_queue))
-        connection.on(EventType.CLOSE, lambda _: print("Connection closed"))
-        connection.on(EventType.ERROR, lambda error: print(f"ERROR: {error}"))
+        connection.on(EventType.CLOSE, lambda _: log.info('disconnected'))
+        connection.on(EventType.ERROR, lambda err: log.error(f'{err}'))
 
-        # Helper task
-        audio_sender_task = asyncio.create_task(audio_sender(connection, audio_queue))
-        print('Audio now running...')
+        _audio_sender_task = asyncio.create_task(audio_sender(connection, audio_queue))
+        log.info('audio sender running')
 
-        # Start listening
-        print('start listening...')
+        log.info('listening')
         await connection.start_listening()
-        print('done listening...')
+        log.info('done listening')

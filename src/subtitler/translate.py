@@ -1,8 +1,12 @@
+import logging
 import os
 
 import asyncio
 
 import deepl
+
+
+log = logging.getLogger(__name__.split('.')[-1])
 
 
 
@@ -13,6 +17,7 @@ async def run(queue: asyncio.Queue):
         send_platform_info=False,
     )
 
+    log.info('starting')
     while True:
         transcription = await queue.get()
         result = await asyncio.to_thread(
@@ -20,4 +25,4 @@ async def run(queue: asyncio.Queue):
             transcription,
             target_lang='pt-PT',
         )
-        print(f'\n{result.text}\n')
+        print(f'\n{result.text}')
