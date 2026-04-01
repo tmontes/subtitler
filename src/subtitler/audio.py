@@ -13,8 +13,10 @@ async def stream_input(queue: asyncio.Queue):
 
     loop = asyncio.get_event_loop()
 
-    def push_audio(buffer, frames, time, status):
-        log.debug(f'pushing {len(buffer)} bytes')
+    def push_audio(buffer, _frames, _time, status):
+        if status:
+            log.warning(f'{status=}')
+        log.debug(f'pushing {len(buffer)}')
         loop.call_soon_threadsafe(
             queue.put_nowait,
             bytes(buffer),
