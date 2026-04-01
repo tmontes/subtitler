@@ -1,9 +1,10 @@
+import asyncio
 import logging
 import os
 
-import asyncio
-
 import deepl
+
+from . import config
 
 
 log = logging.getLogger(__name__.split('.')[-1])
@@ -23,6 +24,6 @@ async def run(queue: asyncio.Queue):
         result = await asyncio.to_thread(
             client.translate_text,
             transcription,
-            target_lang='pt-PT',
+            target_lang=config.DL_LANG,
         )
         print(f'\n{result.text}')

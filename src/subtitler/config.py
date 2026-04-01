@@ -1,3 +1,15 @@
+# General
+
+SPEECH_LANG = 'en-US'
+SUBTITLE_LANG = 'pt-PT'
+
+
+# DeepL
+# -----
+
+DL_LANG = SUBTITLE_LANG
+
+
 # Deepgram
 # --------
 # https://developers.deepgram.com/reference/speech-to-text/listen-streaming
@@ -5,7 +17,7 @@
 DG_MODEL = 'nova-3'
 DG_ENCODING = 'linear16'
 DG_SAMPLE_RATE = 48_000
-DG_LANGUAGE = 'en-US' # 'pt-PT'
+DG_LANGUAGE = SPEECH_LANG
 
 
 # Sounddevice
