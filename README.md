@@ -33,6 +33,8 @@ Notes, as of this writing:
 
 * Behaviour with multiple displays is unpredictable.
 
+* macOS fullscreen applications won't be overlayed, they take a "virtual display" of their own!
+
 
 ## Running
 
