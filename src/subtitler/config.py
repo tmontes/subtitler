@@ -1,3 +1,5 @@
+from . import VERSION
+
 # General
 
 SPEECH_LANG = 'en-US'
@@ -14,7 +16,7 @@ UI_SECONDS_MIN = 2
 UI_SECONDS_MAX = 7
 UI_CHARACTERS_PER_SECOND = 15
 
-UI_HELLO = 'subtitler ready'
+UI_HELLO = f'subtitler {VERSION} ready'
 
 
 # DeepL
