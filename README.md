@@ -26,6 +26,14 @@ Notes, as of this writing:
 2. The free version allows for 50k characters/month.
 
 
+## Limitations
+
+* The subtitles are displayed in a rectangular transparent window sitting on top
+  of all other windows, towards the bottom of the screen - click through does not work.
+
+* Behaviour with multiple displays is unpredictable.
+
+
 ## Running
 
 * Set the `DEEPGRAM_API_KEY` environment variable.
@@ -40,6 +48,7 @@ Notes, as of this writing:
   * Spoken language.
   * Subtitle language.
   * Font family and size.
+  * Subtitle timing.
 
 
 ## The background story
