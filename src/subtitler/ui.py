@@ -74,7 +74,7 @@ def create() -> tk.Tk:
     )
     canvas.pack()
 
-    _create_text(canvas, w, h, config.UI_HELLO)
+    _create_text(canvas, w, h, '')
     root_window.wm_attributes("-topmost", True)
     root_window.update()
 
@@ -82,12 +82,30 @@ def create() -> tk.Tk:
 
 
 
+
+def _schedule_cleanup(loop, root_window, text):
+
+    hold_duration = min(
+        config.UI_SECONDS_MAX,
+        max(
+            config.UI_SECONDS_MIN,
+            len(text) / config.UI_CHARACTERS_PER_SECOND,
+        )
+    )
+    return loop.call_later(hold_duration, _update_text, root_window, '')
+
+
+
 async def run(root_window: tk.Tk, queue: asyncio.Queue) -> None:
 
-    await asyncio.sleep(config.UI_HELLO_SECONDS)
-    _update_text(root_window, '')
+    loop = asyncio.get_event_loop()
+
+    _update_text(root_window, config.UI_HELLO)
+    cleanup_timer = _schedule_cleanup(loop, root_window, config.UI_HELLO)
 
     while True:
         text = await queue.get()
+        cleanup_timer.cancel()
         log.debug(f'{text=}')
         _update_text(root_window, text)
+        cleanup_timer = _schedule_cleanup(loop, root_window, text)

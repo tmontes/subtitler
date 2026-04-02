@@ -6,10 +6,15 @@ SUBTITLE_LANG = 'pt-PT'
 UI_HEIGHT = 210
 UI_H_PADDING = 64
 UI_V_PADDING = 32
+
 UI_FONT = ('Helvetica', 64, 'bold')
 UI_FONT_BORDER = 3
-UI_HELLO = 'subtitler running...'
-UI_HELLO_SECONDS = 3
+
+UI_SECONDS_MIN = 2
+UI_SECONDS_MAX = 7
+UI_CHARACTERS_PER_SECOND = 15
+
+UI_HELLO = 'subtitler ready'
 
 
 # DeepL
