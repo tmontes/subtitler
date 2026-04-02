@@ -3,6 +3,7 @@ import logging
 
 from deepgram import AsyncDeepgramClient
 from deepgram.core.events import EventType
+from deepgram.listen.v1.socket_client import AsyncV1SocketClient
 from deepgram.listen.v1.types import (
     ListenV1Results,
     ListenV1Metadata,
@@ -13,7 +14,9 @@ from deepgram.listen.v1.types import (
 from . import config
 
 
+
 log = logging.getLogger(__name__.split('.')[-1])
+
 
 
 ListenV1Response = (
@@ -22,16 +25,13 @@ ListenV1Response = (
 
 
 
-async def audio_sender(connection, queue):
+async def audio_sender(connection: AsyncV1SocketClient, audio_queue: asyncio.Queue) -> None:
 
+    log.info('audio sender starting')
     while True:
-        audio_buffer = await queue.get()
+        audio_buffer = await audio_queue.get()
         await connection.send_media(audio_buffer)
 
-    # # Send control messages
-    # await connection.send_keep_alive()
-    # await connection.send_finalize()
-    # await connection.send_close_stream()
 
 
 def handle_message(message: ListenV1Response, text_queue: asyncio.Queue) -> None:
@@ -47,9 +47,12 @@ def handle_message(message: ListenV1Response, text_queue: asyncio.Queue) -> None
             log.error(f'unhandled: {message=}')
 
 
-async def run(audio_queue: asyncio.Queue, text_queue: asyncio.Queue):
 
+async def run(audio_queue: asyncio.Queue, text_queue: asyncio.Queue) -> None:
+
+    log.info('starting')
     client = AsyncDeepgramClient()
+
     async with client.listen.v1.connect(
         model=config.DG_MODEL,
         encoding=config.DG_ENCODING,
@@ -58,15 +61,15 @@ async def run(audio_queue: asyncio.Queue, text_queue: asyncio.Queue):
         punctuate='true',
     ) as connection:
 
-
         connection.on(EventType.OPEN, lambda _: log.info('connected'))
         connection.on(EventType.MESSAGE, lambda m: handle_message(m, text_queue))
         connection.on(EventType.CLOSE, lambda _: log.info('disconnected'))
         connection.on(EventType.ERROR, lambda err: log.error(f'{err}'))
 
+        # must keep a reference to the task object to prevent garbage collection
+        # see https://docs.python.org/3/library/asyncio-task.html#asyncio.create_task
         _audio_sender_task = asyncio.create_task(audio_sender(connection, audio_queue))
-        log.info('audio sender running')
 
-        log.info('listening')
+        log.info('starting listening')
         await connection.start_listening()
         log.info('done listening')

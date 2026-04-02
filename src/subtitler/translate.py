@@ -7,18 +7,19 @@ import deepl
 from . import config
 
 
+
 log = logging.getLogger(__name__.split('.')[-1])
 
 
 
-async def run(text_queue: asyncio.Queue, ui_queue: asyncio.Queue):
+async def run(text_queue: asyncio.Queue, ui_queue: asyncio.Queue) -> None:
 
+    log.info('starting')
     client = deepl.DeepLClient(
         auth_key=os.environ['DEEPL_API_KEY'],
         send_platform_info=False,
     )
 
-    log.info('starting')
     while True:
         transcription = await text_queue.get()
         # TODO: could we do better? more context, for example?
@@ -27,6 +28,10 @@ async def run(text_queue: asyncio.Queue, ui_queue: asyncio.Queue):
             transcription,
             target_lang=config.DL_LANG,
         )
-        translated = result.text
+        if isinstance(result, list):
+            translated = result[0].text if result else ''
+            log.warning(f'non-unique? {result=}')
+        else:
+            translated = result.text
         log.debug(f'sending {translated=}')
         await ui_queue.put(translated)

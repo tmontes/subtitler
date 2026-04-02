@@ -1,6 +1,12 @@
 import asyncio
 import logging
 import os
+import tkinter as tk
+
+import certifi
+
+# motivation: maybe the Python installation has no certificate store available
+os.environ['SSL_CERT_FILE'] = certifi.where()
 
 from . import audio
 from . import transcribe
@@ -8,14 +14,12 @@ from . import translate
 from . import ui
 
 
-import certifi
-os.environ['SSL_CERT_FILE'] = certifi.where()
-
 
 log = logging.getLogger(__package__)
 
 
-def setup_logging():
+
+def setup_logging() -> None:
 
     logging.basicConfig(
         level=logging.INFO,
@@ -25,7 +29,8 @@ def setup_logging():
     logging.getLogger('deepl').setLevel(logging.WARNING)
 
 
-async def async_main(root_window) -> None:
+
+async def async_main(root_window: tk.Tk) -> None:
 
     audio_queue = asyncio.Queue()
     text_queue = asyncio.Queue()
@@ -39,9 +44,12 @@ async def async_main(root_window) -> None:
     )
 
 
-def main():
+
+def main() -> None:
+
     setup_logging()
     root_window = ui.create()
+
     try:
         log.info('start')
         asyncio.run(async_main(root_window))
